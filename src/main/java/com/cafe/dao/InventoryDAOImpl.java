@@ -3,6 +3,7 @@ package com.cafe.dao;
 
 import com.cafe.db.Database;
 import com.cafe.model.InventoryItem;
+import com.cafe.model.InventoryItem;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class InventoryDAOImpl implements InventoryDAO {
         }
         
         String sql = "INSERT INTO inventory (name, category, quantity, unit_price) VALUES (?, ?, ?, ?)";
+        
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 

@@ -5,6 +5,7 @@
 package com.cafe.dao;
 
 import com.cafe.model.InventoryItem;
+import com.cafe.model.InventoryItem;
 import java.util.List;
 
 /**
