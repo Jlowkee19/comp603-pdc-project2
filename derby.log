@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Mon Jun 02 20:31:50 NZST 2025:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0197-2fc4-b6f8-00000f57d610 
-on database directory /Users/justlowkee/Documents/GitHub/comp603-pdc-project2/cafeDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1cf4f579 
-Loaded from file:/Users/justlowkee/.m2/repository/org/apache/derby/derby/10.17.1.0/derby-10.17.1.0.jar
+Sun Jun 08 18:04:05 NZST 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0197-4e23-9b37-00001e519718 
+on database directory C:\Users\Enzo\Documents\GitHub\comp603-pdc-project2\cafeDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@70dea4e 
+Loaded from file:/C:/Users/Enzo/.m2/repository/org/apache/derby/derby/10.17.1.0/derby-10.17.1.0.jar
 java.vendor=Oracle Corporation
-java.runtime.version=21.0.5+9-LTS-239
-user.dir=/Users/justlowkee/Documents/GitHub/comp603-pdc-project2
-os.name=Mac OS X
-os.arch=aarch64
-os.version=15.5
+java.runtime.version=21.0.7+8-LTS-245
+user.dir=C:\Users\Enzo\Documents\GitHub\comp603-pdc-project2
+os.name=Windows 11
+os.arch=amd64
+os.version=10.0
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

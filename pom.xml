@@ -37,6 +37,14 @@
             <scope>test</scope>
         </dependency>
         
+        <!-- FlatLaf -->
+        <dependency>
+        <groupId>com.formdev</groupId>
+        <artifactId>flatlaf</artifactId>
+        <version>3.2.5</version>
+            <type>jar</type>
+        </dependency>
+        
         <!-- Apache Derby for Project 2 (Database) -->
         <dependency>
             <groupId>org.apache.derby</groupId>
@@ -48,6 +56,11 @@
             <groupId>org.apache.derby</groupId>
             <artifactId>derbytools</artifactId>
             <version>${derby.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>RELEASE260</version>
         </dependency>
     </dependencies>
     

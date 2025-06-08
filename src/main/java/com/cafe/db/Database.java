@@ -21,27 +21,6 @@ public class Database {
         return conn;
     }
     
-//    private static void initializeDatabase() {
-//        try (InputStream is = Database.class.getResourceAsStream("/init_db.sql")) {
-//            if (is == null) throw new FileNotFoundException("init_db.sql not found");
-//
-//            String sql = new String(is.readAllBytes());
-//            // Split into individual statements
-//            String[] statements = sql.split(";\\s*");
-//
-//            try (Statement stmt = conn.createStatement()) {
-//                for (String statement : statements) {
-//                    if (!statement.trim().isEmpty()) {
-//                        stmt.executeUpdate(statement);
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//            System.err.println("DATABASE INIT FAILED: " + e.getMessage());
-//            throw new RuntimeException(e);
-//        }
-//    }
-    
     private static void initializeDatabase() {
         try (InputStream is = Database.class.getResourceAsStream("/init_db.sql")) {
             if (is == null) throw new FileNotFoundException("init_db.sql not found");

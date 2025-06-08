@@ -122,6 +122,16 @@ public class UserAccountDAOImpl implements UserAccountDAO {
             System.err.println("Error deleting user: " + e.getMessage());
         }
     }
+    
+    public boolean validateLogin(String username, String password) {
+        UserAccount user = getUserByUsername(username);
+        if (user != null && user.getPassword().equals(password)) {
+            return true;
+        }
+        return false;
+    }
+    
+    
 
    public void printAllUsers() {
         List<UserAccount> users = getAllUsers();
@@ -130,4 +140,7 @@ public class UserAccountDAOImpl implements UserAccountDAO {
             System.out.println(user);
         }
     }
+   
+   
+   
 }
