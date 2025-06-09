@@ -1,5 +1,6 @@
 package com.cafe;
 
+// Dawg
 import com.cafe.dao.InventoryDAO;
 import com.cafe.dao.InventoryDAOImpl;
 import com.cafe.dao.UserAccountDAO;
@@ -24,7 +25,7 @@ import java.sql.Statement;
 public class CafeApp {    
     
     public static void main(String[] args) {
-        
+        // Dawg
         FlatLightLaf.setup();
         try {
             // Database setup and testing
@@ -45,6 +46,7 @@ public class CafeApp {
     }
     
     private static void setupDatabase() throws SQLException {
+        // Dawg
         System.out.println("=== DATABASE SETUP ===");
         
         // Clean up for development
@@ -80,6 +82,7 @@ public class CafeApp {
     }
 
     private static void startApplication() {
+        // Dawg
         System.out.println("\n=== STARTING APPLICATION ===");
         
         // Set up GUI on the Event Dispatch Thread
