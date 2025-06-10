@@ -1,6 +1,5 @@
 package com.cafe;
 
-// Dawg
 import com.cafe.dao.InventoryDAO;
 import com.cafe.dao.InventoryDAOImpl;
 import com.cafe.dao.UserAccountDAO;
@@ -25,8 +24,13 @@ import java.sql.Statement;
 public class CafeApp {    
     
     public static void main(String[] args) {
-        // Dawg
         FlatLightLaf.setup();
+        
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Shutting down application...");
+            Database.shutdownDerby();
+        }));
+        
         try {
             // Database setup and testing
             setupDatabase();
@@ -37,16 +41,17 @@ public class CafeApp {
         } catch (SQLException e) {
             System.err.println("FATAL DATABASE ERROR: " + e.getMessage());
             e.printStackTrace();
+            Database.shutdownDerby();
             System.exit(1); // Exit if database setup fails
         } catch (Exception e) {
             System.err.println("FATAL APPLICATION ERROR: " + e.getMessage());
             e.printStackTrace();
+            Database.shutdownDerby();
             System.exit(1);
         }
     }
     
     private static void setupDatabase() throws SQLException {
-        // Dawg
         System.out.println("=== DATABASE SETUP ===");
         
         // Clean up for development
@@ -76,13 +81,12 @@ public class CafeApp {
         
         // Uncomment to delete specific users
         // userDao.deleteUser(402);
-       // userDao.deleteUser(502);
+       //userDao.deleteUser(1);
         
         System.out.println("Database setup complete!");
     }
 
     private static void startApplication() {
-        // Dawg
         System.out.println("\n=== STARTING APPLICATION ===");
         
         // Set up GUI on the Event Dispatch Thread

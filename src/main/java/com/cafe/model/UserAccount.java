@@ -10,10 +10,9 @@ public class UserAccount implements Serializable {
 
     private Long id;
     private String firstname;
-    private String surname;
+    private String lastname;
     private String username;
     private String password;
-    private Boolean active;
     private byte[] photo;
     private Role role;
 
@@ -22,14 +21,13 @@ public class UserAccount implements Serializable {
     }
 
     // Parameterized constructor
-    public UserAccount(Long id, String firstname, String surname, String username, String password,
+    public UserAccount(Long id, String firstname, String lastname, String username, String password,
                        Boolean active, byte[] photo, Role role) {
         this.id = id;
         this.firstname = firstname;
-        this.surname = surname;
+        this.lastname = lastname;
         this.username = username;
         this.password = password;
-        this.active = active;
         this.photo = photo;
         this.role = role;
     }
@@ -42,17 +40,14 @@ public class UserAccount implements Serializable {
     public String getFirstname() { return firstname; }
     public void setFirstname(String firstname) { this.firstname = firstname; }
 
-    public String getSurname() { return surname; }
-    public void setSurname(String surname) { this.surname = surname; }
+    public String getLastname() { return lastname; }
+    public void setLastname(String surname) { this.lastname = surname; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
-
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
 
     public byte[] getPhoto() { return photo; }
     public void setPhoto(byte[] photo) { this.photo = photo; }
@@ -68,9 +63,8 @@ public class UserAccount implements Serializable {
         return "UserAccount{" +
                 "id=" + id +
                 ", firstname='" + firstname + '\'' +
-                ", surname='" + surname + '\'' +
+                ", surname='" + lastname + '\'' +
                 ", username='" + username + '\'' +
-                ", active=" + active +
                 ", role=" + (role != null ? role.getName() : "null") +
                 '}';
     }

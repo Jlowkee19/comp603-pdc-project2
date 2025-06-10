@@ -17,19 +17,25 @@ public class UserAccountDAOImpl implements UserAccountDAO {
 
     @Override
     public void addUser(UserAccount user) {
-        String sql = "INSERT INTO user_account (firstname, surname, username, password, active, role) VALUES (?, ?, ?, ?, ?, ?)";
+        
+         // Check if username already exists
+        if (getUserByUsername(user.getUsername()) != null) {
+            System.out.println("Error: Username '" + user.getUsername() + "' already exists!");
+            return; // Or throw an exception
+        }
+
+        String sql = "INSERT INTO user_account (firstname, lastname, username, password, role) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getFirstname());
-            stmt.setString(2, user.getSurname());
+            stmt.setString(2, user.getLastname());
             stmt.setString(3, user.getUsername());
             stmt.setString(4, user.getPassword());
-            stmt.setBoolean(5, user.getActive() != null && user.getActive());
-            stmt.setString(6, user.getRole() != null ? user.getRole().getName() : null);
+            stmt.setString(5, user.getRole() != null ? user.getRole().getName() : null);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace(); // Replace with proper logging
-        }
+        } 
     }
 
     @Override
@@ -43,10 +49,9 @@ public class UserAccountDAOImpl implements UserAccountDAO {
                 UserAccount user = new UserAccount();
                 user.setId(rs.getLong("id"));
                 user.setFirstname(rs.getString("firstname"));
-                user.setSurname(rs.getString("surname"));
+                user.setLastname(rs.getString("lastname"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
-                user.setActive(rs.getBoolean("active"));
 
                 // assuming Role is a simple object
                 user.setRole(new com.cafe.model.Role(null, rs.getString("role")));
@@ -71,10 +76,9 @@ public class UserAccountDAOImpl implements UserAccountDAO {
                 UserAccount user = new UserAccount();
                 user.setId(rs.getLong("id"));
                 user.setFirstname(rs.getString("firstname"));
-                user.setSurname(rs.getString("surname"));
+                user.setLastname(rs.getString("lastname"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
-                user.setActive(rs.getBoolean("active"));
                 user.setRole(new com.cafe.model.Role(null, rs.getString("role")));
 
                 users.add(user);
@@ -89,14 +93,13 @@ public class UserAccountDAOImpl implements UserAccountDAO {
 
     @Override
     public void updateUser(UserAccount user) {
-        String sql = "UPDATE user_account SET firstname=?, surname=?, password=?, active=?, role=? WHERE username=?";
+        String sql = "UPDATE user_account SET firstname=?, lastname=?, password=?, role=? WHERE username=?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getFirstname());
-            stmt.setString(2, user.getSurname());
+            stmt.setString(2, user.getLastname());
             stmt.setString(3, user.getPassword());
-            stmt.setBoolean(4, user.getActive() != null && user.getActive());
-            stmt.setString(5, user.getRole() != null ? user.getRole().getName() : null);
-            stmt.setString(6, user.getUsername());
+            stmt.setString(4, user.getRole() != null ? user.getRole().getName() : null);
+            stmt.setString(5, user.getUsername());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -140,7 +143,5 @@ public class UserAccountDAOImpl implements UserAccountDAO {
             System.out.println(user);
         }
     }
-   
-   
-   
+
 }
