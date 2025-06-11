@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.cafe.gui;
 
 import com.cafe.dao.UserAccountDAO;
@@ -90,7 +86,6 @@ public class LoginFrame extends javax.swing.JFrame {
 
     
     private void userFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userFieldActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_userFieldActionPerformed
 
 
@@ -104,11 +99,11 @@ public class LoginFrame extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            com.formdev.flatlaf.FlatLightLaf.setup(); // ✅ Use FlatLaf
-             UIManager.put("TextComponent.arc", 10);
-             UIManager.put("Component.focusWidth", 1);
-             UIManager.put("Button.arc", 15);
-             UIManager.put("Component.arc", 10);
+            com.formdev.flatlaf.FlatLightLaf.setup();
+            UIManager.put("TextComponent.arc", 10);
+            UIManager.put("Component.focusWidth", 1);
+            UIManager.put("Button.arc", 15);
+            UIManager.put("Component.arc", 10);
         } catch (Exception ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
@@ -151,6 +146,3 @@ public class LoginFrame extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, message, "Login Failed", JOptionPane.ERROR_MESSAGE);
     }
 }
-
-
-

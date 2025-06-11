@@ -2,13 +2,8 @@ package com.cafe.gui;
 
 import javax.swing.JOptionPane;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
 /**
- *
+ * Main GUI window for the Cafe Management System
  * @author Enzo
  */
 public class CafeMain extends javax.swing.JFrame {
@@ -17,9 +12,6 @@ public class CafeMain extends javax.swing.JFrame {
 
     public CafeMain() {
         initComponents();
-        
-        
-        // Center the frame
         setLocationRelativeTo(null);
     }
 

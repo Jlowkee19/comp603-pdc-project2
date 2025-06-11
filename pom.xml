@@ -5,13 +5,13 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
-    <groupId>com.cafe.inventory</groupId>
-    <artifactId>CafeInventorySystem</artifactId>
+    <groupId>com.cafe</groupId>
+    <artifactId>CafeSystem</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     
-    <name>Cafe Inventory Management System</name>
-    <description>A comprehensive inventory management system for cafes</description>
+    <name>Cafe Management System</name>
+    <description>A comprehensive management system for cafes</description>
     
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -90,7 +90,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com.cafe.inventory.CafeSystem</mainClass>
+                    <mainClass>com.cafe.CafeApp</mainClass>
                 </configuration>
             </plugin>
             
@@ -102,7 +102,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.cafe.inventory.CafeSystem</mainClass>
+                            <mainClass>com.cafe.CafeApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

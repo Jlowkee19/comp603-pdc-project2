@@ -7,19 +7,8 @@
  * Created: 1 Jun 2025
  */
 
-CREATE TABLE inventory (
-    id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(50) NOT NULL,
-    category VARCHAR(20) NOT NULL,
-    quantity INT NOT NULL CHECK (quantity >= 0),
-    unit_price DECIMAL(8,2) NOT NULL CHECK (unit_price > 0),
-    UNIQUE (name, category)
-);
-
 CREATE TABLE orders (
     order_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    item_id INT REFERENCES inventory(id),
-    quantity INT NOT NULL,
     order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 /* Table structure for table  'user account*/

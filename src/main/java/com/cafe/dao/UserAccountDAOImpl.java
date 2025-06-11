@@ -1,6 +1,5 @@
 package com.cafe.dao;
 
-
 import com.cafe.db.Database;
 import com.cafe.model.UserAccount;
 import java.sql.*;
@@ -17,11 +16,9 @@ public class UserAccountDAOImpl implements UserAccountDAO {
 
     @Override
     public void addUser(UserAccount user) {
-        
-         // Check if username already exists
         if (getUserByUsername(user.getUsername()) != null) {
             System.out.println("Error: Username '" + user.getUsername() + "' already exists!");
-            return; // Or throw an exception
+            return;
         }
 
         String sql = "INSERT INTO user_account (firstname, lastname, username, password, role) VALUES (?, ?, ?, ?, ?)";
@@ -34,7 +31,7 @@ public class UserAccountDAOImpl implements UserAccountDAO {
 
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace(); // Replace with proper logging
+            e.printStackTrace();
         } 
     }
 
@@ -53,7 +50,6 @@ public class UserAccountDAOImpl implements UserAccountDAO {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
 
-                // assuming Role is a simple object
                 user.setRole(new com.cafe.model.Role(null, rs.getString("role")));
 
                 return user;
