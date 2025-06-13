@@ -1,7 +1,13 @@
 package com.cafe.gui;
 
+import com.cafe.dao.UserAccountDAOImpl;
 import com.cafe.model.UserAccount;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.GridLayout;
+import java.sql.SQLException;
 
 /**
  * Main GUI window for the Cafe Management System
@@ -59,6 +65,79 @@ public class CafeMain extends javax.swing.JFrame {
             }
         }
     }
+    
+    private void openChangePasswordDialog() {
+        if (currentUser == null) {
+            JOptionPane.showMessageDialog(this, "No user is currently logged in.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Create password fields
+        JPasswordField currentPasswordField = new JPasswordField(20);
+        JPasswordField newPasswordField = new JPasswordField(20);
+        JPasswordField confirmPasswordField = new JPasswordField(20);
+        
+        // Create panel for dialog
+        JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
+        panel.add(new JLabel("Current Password:"));
+        panel.add(currentPasswordField);
+        panel.add(new JLabel("New Password:"));
+        panel.add(newPasswordField);
+        panel.add(new JLabel("Confirm New Password:"));
+        panel.add(confirmPasswordField);
+        
+        int option = JOptionPane.showConfirmDialog(
+            this, 
+            panel, 
+            "Change Password", 
+            JOptionPane.OK_CANCEL_OPTION,
+            JOptionPane.PLAIN_MESSAGE
+        );
+        
+        if (option == JOptionPane.OK_OPTION) {
+            String currentPassword = new String(currentPasswordField.getPassword());
+            String newPassword = new String(newPasswordField.getPassword());
+            String confirmPassword = new String(confirmPasswordField.getPassword());
+            
+            // Validate inputs
+            if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (!currentPassword.equals(currentUser.getPassword())) {
+                JOptionPane.showMessageDialog(this, "Current password is incorrect.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (!newPassword.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(this, "New passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (newPassword.length() < 6) {
+                JOptionPane.showMessageDialog(this, "New password must be at least 6 characters long.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Update password
+            try {
+                UserAccountDAOImpl userDAO = new UserAccountDAOImpl();
+                currentUser.setPassword(newPassword);
+                userDAO.updateUser(currentUser);
+                
+                JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                
+                // Clear password fields for security
+                currentPasswordField.setText("");
+                newPasswordField.setText("");
+                confirmPasswordField.setText("");
+                
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Failed to update password: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -105,7 +184,6 @@ public class CafeMain extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuUser = new javax.swing.JMenu();
         jMenuItemLogOut = new javax.swing.JMenuItem();
-        jMenuItemLogIN = new javax.swing.JMenuItem();
         jMenuItemChangePassword = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItemExit = new javax.swing.JMenuItem();
@@ -114,12 +192,6 @@ public class CafeMain extends javax.swing.JFrame {
         jMenuItemCategory = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
-        jMenuSales = new javax.swing.JMenu();
-        jMenuItem7 = new javax.swing.JMenuItem();
-        jMenuView = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
-        jMenuReport = new javax.swing.JMenu();
-        jMenuItem9 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -419,14 +491,6 @@ public class CafeMain extends javax.swing.JFrame {
         });
         jMenuUser.add(jMenuItemLogOut);
 
-        jMenuItemLogIN.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jMenuItemLogIN.setText("Login");
-        jMenuItemLogIN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemLogINActionPerformed(evt);
-            }
-        });
-        jMenuUser.add(jMenuItemLogIN);
 
         jMenuItemChangePassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jMenuItemChangePassword.setText("Change Password");
@@ -449,7 +513,7 @@ public class CafeMain extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuUser);
 
-        jMenuAdministration.setText("Administration");
+        jMenuAdministration.setText("Setup");
         jMenuAdministration.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jMenuItemUser.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -490,48 +554,6 @@ public class CafeMain extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuAdministration);
 
-        jMenuSales.setText("Sales");
-        jMenuSales.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        jMenuItem7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jMenuItem7.setText("User");
-        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem7ActionPerformed(evt);
-            }
-        });
-        jMenuSales.add(jMenuItem7);
-
-        jMenuBar1.add(jMenuSales);
-
-        jMenuView.setText("View");
-        jMenuView.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        jMenuItem6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jMenuItem6.setText("Invoice");
-        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem6ActionPerformed(evt);
-            }
-        });
-        jMenuView.add(jMenuItem6);
-
-        jMenuBar1.add(jMenuView);
-
-        jMenuReport.setText("Report");
-        jMenuReport.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        jMenuItem9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jMenuItem9.setText("User Sales");
-        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem9ActionPerformed(evt);
-            }
-        });
-        jMenuReport.add(jMenuItem9);
-
-        jMenuBar1.add(jMenuReport);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -552,12 +574,9 @@ public class CafeMain extends javax.swing.JFrame {
         logout();
     }//GEN-LAST:event_jMenuItemLogOutActionPerformed
 
-    private void jMenuItemLogINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogINActionPerformed
-
-    }//GEN-LAST:event_jMenuItemLogINActionPerformed
 
     private void jMenuItemChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemChangePasswordActionPerformed
-
+        openChangePasswordDialog();
     }//GEN-LAST:event_jMenuItemChangePasswordActionPerformed
 
     private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
@@ -584,17 +603,6 @@ public class CafeMain extends javax.swing.JFrame {
  
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
-    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
-
-    }//GEN-LAST:event_jMenuItem7ActionPerformed
-
-    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
-
-    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
-        
-    }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jButtonNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewActionPerformed
        
@@ -670,19 +678,12 @@ public class CafeMain extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JMenuItem jMenuItemCategory;
     private javax.swing.JMenuItem jMenuItemChangePassword;
     private javax.swing.JMenuItem jMenuItemExit;
-    private javax.swing.JMenuItem jMenuItemLogIN;
     private javax.swing.JMenuItem jMenuItemLogOut;
     private javax.swing.JMenuItem jMenuItemUser;
-    private javax.swing.JMenu jMenuReport;
-    private javax.swing.JMenu jMenuSales;
     private javax.swing.JMenu jMenuUser;
-    private javax.swing.JMenu jMenuView;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel12;
