@@ -1,5 +1,7 @@
 package com.cafe;
 
+import com.cafe.dao.RoleDAO;
+import com.cafe.dao.RoleDAOImpl;
 import com.cafe.dao.UserAccountDAO;
 import com.cafe.dao.UserAccountDAOImpl;
 import com.cafe.db.Database;
@@ -51,10 +53,8 @@ public class CafeApp {
         Database.getConnection(); // Triggers initialization
         System.out.println("Database connection established!");
         
-        // Test user account operations
-        System.out.println("\n=== USER ACCOUNT TEST ===");
-        UserAccountDAO userDao = new UserAccountDAOImpl();
-        ((UserAccountDAOImpl) userDao).printAllUsers();
+        // Database is ready
+        System.out.println("Tables created and initialized successfully!");
         
         System.out.println("Database setup complete!");
     }

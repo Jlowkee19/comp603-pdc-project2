@@ -1,1 +1,23 @@
+# Build files
 /target/
+build/
+dist/
+
+# Database files
+cafeDB/
+derby.log
+*.db
+*.lck
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+nb-configuration.xml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

@@ -60,12 +60,12 @@ public class UserAccount implements Serializable {
 
     @Override
     public String toString() {
-        return "UserAccount{" +
-                "id=" + id +
-                ", firstname='" + firstname + '\'' +
-                ", surname='" + lastname + '\'' +
-                ", username='" + username + '\'' +
-                ", role=" + (role != null ? role.getName() : "null") +
+        return "UserAccount {" +
+                "id = " + id +
+                ", firstname = '" + firstname + '\'' +
+                ", surname = '" + lastname + '\'' +
+                ", username = '" + username + '\'' +
+                ", role = " + (role != null ? role.getName() : "null") +
                 '}';
     }
 }

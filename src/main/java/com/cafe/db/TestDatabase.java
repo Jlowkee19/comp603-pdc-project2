@@ -1,41 +1,70 @@
 package com.cafe.db;
 
+import com.cafe.dao.RoleDAOImpl;
+import com.cafe.dao.UserAccountDAOImpl;
+import com.cafe.model.Role;
+import com.cafe.model.UserAccount;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
- * Test class for verifying Derby database connection
+ * Test class for verifying Derby database connection and displaying data
  * @author Enzo
  */
 public class TestDatabase {
     
     public static void main(String[] args) {
-        System.out.println("TESTING DERBY DATABASE CONNECTION");
-        System.out.println("_________________________________");
+        System.out.println("=== CAFE DATABASE TEST ===");
         
         try {
             Connection conn = Database.getConnection();
-            System.out.println("Database connection successful!");
+            System.out.println("✓ Database connection successful!");
             
-            if (conn != null && !conn.isClosed()) {
-                System.out.println("Connection is active");
-            }
+            // Display all users
+            displayUsers();
             
-            Connection conn2 = Database.getConnection();
-            System.out.println("Second connection call successful!");
+            // Display all roles
+            displayRoles();
             
             Database.shutdownDatabase();
         
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
-            System.err.println("SQL State: " + e.getSQLState());
             e.printStackTrace();
         } catch (Exception e) {
             System.err.println("Unexpected error: " + e.getMessage());
             e.printStackTrace();
         }
         
-        System.out.println("_________________________________");
-        System.out.println("TEST COMPLETE");
+        System.out.println("\n TEST COMPLETE !!!");
+    }
+    
+    private static void displayUsers() throws SQLException {
+        System.out.println("\n=== USER ACCOUNTS ===");
+        UserAccountDAOImpl userDAO = new UserAccountDAOImpl();
+        List<UserAccount> users = userDAO.getAllUsers();
+        
+        if (users.isEmpty()) {
+            System.out.println("No users found in database.");
+        } else {
+            for (UserAccount user : users) {
+                System.out.println(user);
+            }
+        }
+    }
+    
+    private static void displayRoles() throws SQLException {
+        System.out.println("\n=== ROLES ===");
+        RoleDAOImpl roleDAO = new RoleDAOImpl();
+        List<Role> roles = roleDAO.getAllRoles();
+        
+        if (roles.isEmpty()) {
+            System.out.println("No roles found in database.");
+        } else {
+            for (Role role : roles) {
+                System.out.println(role);
+            }
+        }
     }
 }

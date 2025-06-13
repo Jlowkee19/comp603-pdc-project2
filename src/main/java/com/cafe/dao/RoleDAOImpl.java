@@ -117,4 +117,5 @@ public class RoleDAOImpl implements RoleDAO {
             System.err.println("Error deleting role: " + e.getMessage());
         }
     }
+    
 }
