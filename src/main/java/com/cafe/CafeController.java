@@ -12,10 +12,20 @@ import java.sql.SQLException;
 
 public class CafeController {
 
-    private LoginFrame loginFrame = new LoginFrame();
+    private LoginFrame loginFrame;
     private CafeMain cafeMain = new CafeMain();
 
     public CafeController() {
+        setupLoginFrame();
+        
+        // Set up logout callback
+        cafeMain.setLogoutCallback(() -> {
+            setupLoginFrame();
+        });
+    }
+    
+    private void setupLoginFrame() {
+        loginFrame = new LoginFrame();
         loginFrame.setVisible(true);
 
         loginFrame.getLoginButton().addActionListener(new ActionListener() {
@@ -50,6 +60,10 @@ public class CafeController {
 
          // Now check the validation result
          if (isValid) {
+             // Get the user and set it in the main window
+             UserAccount user = dao.getUserByUsername(username);
+             cafeMain.setCurrentUser(user);
+             
              loginFrame.dispose();
              cafeMain.setVisible(true);
          } else {

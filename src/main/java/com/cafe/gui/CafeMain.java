@@ -1,5 +1,6 @@
 package com.cafe.gui;
 
+import com.cafe.model.UserAccount;
 import javax.swing.JOptionPane;
 
 /**
@@ -9,10 +10,54 @@ import javax.swing.JOptionPane;
 public class CafeMain extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CafeMain.class.getName());
+    private UserAccount currentUser;
+    private Runnable logoutCallback;
 
     public CafeMain() {
         initComponents();
         setLocationRelativeTo(null);
+    }
+    
+    public void setCurrentUser(UserAccount user) {
+        this.currentUser = user;
+        updateMenuText();
+    }
+    
+    public void setLogoutCallback(Runnable callback) {
+        this.logoutCallback = callback;
+    }
+    
+    private void updateMenuText() {
+        if (currentUser != null) {
+            String displayName = currentUser.getFirstname() + " " + currentUser.getLastname();
+            jMenuUser.setText(displayName);
+        } else {
+            jMenuUser.setText("File");
+        }
+    }
+    
+    private void logout() {
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to log out?",
+            "Logout Confirmation",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Clear current user
+            currentUser = null;
+            updateMenuText();
+            
+            // Hide main window
+            this.setVisible(false);
+            
+            // Call the logout callback if available
+            if (logoutCallback != null) {
+                logoutCallback.run();
+            }
+        }
     }
 
     /**
@@ -504,7 +549,7 @@ public class CafeMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
  
     private void jMenuItemLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogOutActionPerformed
-
+        logout();
     }//GEN-LAST:event_jMenuItemLogOutActionPerformed
 
     private void jMenuItemLogINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemLogINActionPerformed
