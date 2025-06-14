@@ -4,17 +4,314 @@
  */
 package com.cafe.gui.dialogs;
 
+import com.cafe.dao.UserAccountDAO;
+import com.cafe.dao.UserAccountDAOImpl;
+import com.cafe.dao.RoleDAO;
+import com.cafe.dao.RoleDAOImpl;
+import com.cafe.model.UserAccount;
+import com.cafe.model.Role;
+import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
- * @author justlowkee
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public class UserAccDialog_2 extends javax.swing.JFrame {
+    
+    private UserAccountDAO userAccountDAO;
+    private RoleDAO roleDAO;
+    private UserAccount currentUser;
+    private String selectedPhotoPath;
+    private boolean isEditMode = false;
+    private Runnable refreshCallback;
 
     /**
      * Creates new form UserAccDialog_2
      */
     public UserAccDialog_2() {
+        super();
         initComponents();
+        initializeDialog();
+        setupPhotoClickListener();
+        setupPlaceholders();
+        loadRoles();
+    }
+    
+    private void initializeDialog() {
+        userAccountDAO = new UserAccountDAOImpl();
+        try {
+            roleDAO = new RoleDAOImpl();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error initializing role DAO: " + e.getMessage(),
+                "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+        setLocationRelativeTo(null);
+        setTitle("User Account Form");
+        
+        // Ensure images directory exists
+        createImagesDirectory();
+    }
+    
+    private void createImagesDirectory() {
+        try {
+            Path imagesPath = Paths.get("src/main/resources/images");
+            if (!Files.exists(imagesPath)) {
+                Files.createDirectories(imagesPath);
+            }
+        } catch (IOException e) {
+            System.err.println("Error creating images directory: " + e.getMessage());
+        }
+    }
+    
+    private void setupPhotoClickListener() {
+        jpicture.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                selectPhoto();
+            }
+        });
+        
+        jpicture.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jpicture.setToolTipText("Click to select photo");
+    }
+    
+    private void setupPlaceholders() {
+        setupPlaceholder(jTextField1, "Enter first name...");
+        setupPlaceholder(jTextField2, "Enter last name...");
+        setupPlaceholder(jTextField3, "Enter username...");
+        setupPasswordPlaceholder();
+    }
+    
+    private void setupPlaceholder(javax.swing.JTextField textField, String placeholder) {
+        textField.setText(placeholder);
+        textField.setForeground(java.awt.Color.GRAY);
+        
+        textField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(java.awt.Color.BLACK);
+                }
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(java.awt.Color.GRAY);
+                }
+            }
+        });
+    }
+    
+    private void setupPasswordPlaceholder() {
+        jPasswordField1.setText("password");
+        jPasswordField1.setForeground(java.awt.Color.GRAY);
+        jPasswordField1.setEchoChar((char) 0); // Show placeholder text
+        
+        jPasswordField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (String.valueOf(jPasswordField1.getPassword()).equals("password")) {
+                    jPasswordField1.setText("");
+                    jPasswordField1.setForeground(java.awt.Color.BLACK);
+                    jPasswordField1.setEchoChar('*'); // Hide password
+                }
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (jPasswordField1.getPassword().length == 0) {
+                    jPasswordField1.setText("password");
+                    jPasswordField1.setForeground(java.awt.Color.GRAY);
+                    jPasswordField1.setEchoChar((char) 0); // Show placeholder text
+                }
+            }
+        });
+    }
+    
+    private void loadRoles() {
+        if (roleDAO != null) {
+            try {
+                List<Role> roles = roleDAO.getAllRoles();
+                jComboBox1.removeAllItems();
+                for (Role role : roles) {
+                    jComboBox1.addItem(role.getName());
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error loading roles: " + e.getMessage(),
+                    "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private void selectPhoto() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select Profile Photo");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        
+        // Set file filter for images
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            "Image files", "jpg", "jpeg", "png", "gif", "bmp");
+        fileChooser.setFileFilter(filter);
+        
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                // Generate unique filename
+                String filename = "user_" + System.currentTimeMillis() + 
+                    getFileExtension(selectedFile.getName());
+                
+                // Copy file to images directory
+                Path sourcePath = selectedFile.toPath();
+                Path targetPath = Paths.get("src/main/resources/images", filename);
+                Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                
+                selectedPhotoPath = filename;
+                
+                // Display the image in the label
+                displayPhoto(targetPath.toString());
+                
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error copying photo: " + e.getMessage(),
+                    "File Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private String getFileExtension(String filename) {
+        int lastDotIndex = filename.lastIndexOf('.');
+        return (lastDotIndex > 0) ? filename.substring(lastDotIndex) : "";
+    }
+    
+    private void displayPhoto(String imagePath) {
+        try {
+            ImageIcon imageIcon = new ImageIcon(imagePath);
+            // Scale the image to fit the label
+            Image image = imageIcon.getImage();
+            Image scaledImage = image.getScaledInstance(
+                jpicture.getWidth(), jpicture.getHeight(), Image.SCALE_SMOOTH);
+            jpicture.setIcon(new ImageIcon(scaledImage));
+        } catch (Exception e) {
+            System.err.println("Error displaying photo: " + e.getMessage());
+        }
+    }
+    
+    public void setUserData(UserAccount user) {
+        currentUser = user;
+        isEditMode = (user != null);
+        
+        if (isEditMode) {
+            // Populate form with existing user data
+            clearPlaceholders();
+            jTextField1.setText(user.getFirstname() != null ? user.getFirstname() : "");
+            jTextField2.setText(user.getLastname() != null ? user.getLastname() : "");
+            jTextField3.setText(user.getUsername() != null ? user.getUsername() : "");
+            jPasswordField1.setText(""); // Don't show existing password
+            
+            // Set role
+            if (user.getRole() != null) {
+                jComboBox1.setSelectedItem(user.getRole().getName());
+            }
+            
+            // Load existing photo if available
+            if (user.getPhoto() != null && user.getPhoto().length > 0) {
+                try {
+                    // Save byte[] data to temporary file for display
+                    selectedPhotoPath = "temp_user_" + user.getId() + ".jpg";
+                    Path tempPath = Paths.get("src/main/resources/images/", selectedPhotoPath);
+                    Files.write(tempPath, user.getPhoto());
+                    displayPhoto(tempPath.toString());
+                } catch (IOException e) {
+                    System.err.println("Error displaying existing photo: " + e.getMessage());
+                }
+            }
+            
+            jButton1.setText("Update");
+        } else {
+            // Clear form for new user
+            clearForm();
+            jButton1.setText("Save");
+        }
+    }
+    
+    private void clearPlaceholders() {
+        if (jTextField1.getForeground().equals(java.awt.Color.GRAY)) {
+            jTextField1.setText("");
+            jTextField1.setForeground(java.awt.Color.BLACK);
+        }
+        if (jTextField2.getForeground().equals(java.awt.Color.GRAY)) {
+            jTextField2.setText("");
+            jTextField2.setForeground(java.awt.Color.BLACK);
+        }
+        if (jTextField3.getForeground().equals(java.awt.Color.GRAY)) {
+            jTextField3.setText("");
+            jTextField3.setForeground(java.awt.Color.BLACK);
+        }
+        if (jPasswordField1.getForeground().equals(java.awt.Color.GRAY)) {
+            jPasswordField1.setText("");
+            jPasswordField1.setForeground(java.awt.Color.BLACK);
+            jPasswordField1.setEchoChar('*');
+        }
+    }
+    
+    private void clearForm() {
+        setupPlaceholders();
+        jComboBox1.setSelectedIndex(0);
+        selectedPhotoPath = null;
+        jpicture.setIcon(new ImageIcon(getClass().getResource("/images/no photo.jpg")));
+    }
+    
+    private boolean validateForm() {
+        String firstName = jTextField1.getText();
+        String lastName = jTextField2.getText();
+        String username = jTextField3.getText();
+        String password = String.valueOf(jPasswordField1.getPassword());
+        
+        // Check for empty or placeholder values
+        if (firstName.isEmpty() || firstName.equals("Enter first name...")) {
+            showValidationError("Please enter a first name.");
+            return false;
+        }
+        
+        if (lastName.isEmpty() || lastName.equals("Enter last name...")) {
+            showValidationError("Please enter a last name.");
+            return false;
+        }
+        
+        if (username.isEmpty() || username.equals("Enter username...")) {
+            showValidationError("Please enter a username.");
+            return false;
+        }
+        
+        if (!isEditMode && (password.isEmpty() || password.equals("password"))) {
+            showValidationError("Please enter a password.");
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private void showValidationError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Validation Error", JOptionPane.WARNING_MESSAGE);
+    }
+    
+    public void setRefreshCallback(Runnable callback) {
+        this.refreshCallback = callback;
     }
 
     /**
@@ -42,7 +339,7 @@ public class UserAccDialog_2 extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jpicture = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("October Compressed Tamil", 1, 18)); // NOI18N
         jLabel1.setText("Firstname:");
@@ -62,6 +359,11 @@ public class UserAccDialog_2 extends javax.swing.JFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jButton1.setText("Save");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 102, 153), 2, true), "Photo", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Helvetica Neue", 0, 13), new java.awt.Color(0, 102, 153))); // NOI18N
 
@@ -167,6 +469,131 @@ public class UserAccDialog_2 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (!validateForm()) {
+            return;
+        }
+        
+        try {
+            String firstName = jTextField1.getText();
+            String lastName = jTextField2.getText();
+            String username = jTextField3.getText();
+            String password = String.valueOf(jPasswordField1.getPassword());
+            String role = (String) jComboBox1.getSelectedItem();
+            
+            if (isEditMode) {
+                // Update existing user
+                currentUser.setFirstname(firstName);
+                currentUser.setLastname(lastName);
+                currentUser.setUsername(username);
+                // Find and set the Role object
+                if (roleDAO != null) {
+                    try {
+                        Role roleObj = roleDAO.getAllRoles().stream()
+                            .filter(r -> r.getName().equals(role))
+                            .findFirst()
+                            .orElse(null);
+                        currentUser.setRole(roleObj);
+                    } catch (SQLException ex) {
+                        System.err.println("Error setting role: " + ex.getMessage());
+                    }
+                }
+                
+                // Only update password if it's not the placeholder
+                if (!password.equals("password") && !password.isEmpty()) {
+                    currentUser.setPassword(password);
+                }
+                
+                // Update photo if selected
+                if (selectedPhotoPath != null) {
+                    try {
+                        Path photoPath = Paths.get("src/main/resources/images/" + selectedPhotoPath);
+                        if (Files.exists(photoPath)) {
+                            byte[] photoBytes = Files.readAllBytes(photoPath);
+                            currentUser.setPhoto(photoBytes);
+                        }
+                    } catch (IOException ex) {
+                        System.err.println("Error reading photo: " + ex.getMessage());
+                    }
+                }
+                
+                if (userAccountDAO != null) {
+                    try {
+                        userAccountDAO.updateUser(currentUser);
+                        
+                        JOptionPane.showMessageDialog(this, 
+                            "User updated successfully!",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, 
+                            "Error updating user: " + ex.getMessage(),
+                            "Database Error", JOptionPane.ERROR_MESSAGE);
+                        return; // Don't close dialog on error
+                    }
+                }
+            } else {
+                // Create new user
+                UserAccount newUser = new UserAccount();
+                newUser.setFirstname(firstName);
+                newUser.setLastname(lastName);
+                newUser.setUsername(username);
+                newUser.setPassword(password);
+                // Find and set the Role object
+                if (roleDAO != null) {
+                    try {
+                        Role roleObj = roleDAO.getAllRoles().stream()
+                            .filter(r -> r.getName().equals(role))
+                            .findFirst()
+                            .orElse(null);
+                        newUser.setRole(roleObj);
+                    } catch (SQLException ex) {
+                        System.err.println("Error setting role: " + ex.getMessage());
+                    }
+                }
+                // Set photo if selected
+                if (selectedPhotoPath != null) {
+                    try {
+                        Path photoPath = Paths.get("src/main/resources/images/" + selectedPhotoPath);
+                        if (Files.exists(photoPath)) {
+                            byte[] photoBytes = Files.readAllBytes(photoPath);
+                            newUser.setPhoto(photoBytes);
+                        }
+                    } catch (IOException ex) {
+                        System.err.println("Error reading photo: " + ex.getMessage());
+                    }
+                }
+                
+                if (userAccountDAO != null) {
+                    try {
+                        userAccountDAO.addUser(newUser);
+                        
+                        JOptionPane.showMessageDialog(this, 
+                            "User created successfully!",
+                            "Success", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, 
+                            "Error creating user: " + ex.getMessage(),
+                            "Database Error", JOptionPane.ERROR_MESSAGE);
+                        return; // Don't close dialog on error
+                    }
+                }
+            }
+            
+            dispose();
+            
+            // Call refresh callback if set
+            if (refreshCallback != null) {
+                refreshCallback.run();
+            }
+            
+        } catch (Exception e) {
+            String action = isEditMode ? "updating" : "creating";
+            JOptionPane.showMessageDialog(this, 
+                "Error " + action + " user: " + e.getMessage(),
+                "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

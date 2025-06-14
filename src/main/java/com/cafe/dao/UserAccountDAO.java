@@ -5,17 +5,20 @@
 package com.cafe.dao;
 
 import com.cafe.model.UserAccount;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
  *
- * @author justlowkee
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public interface UserAccountDAO {
-    void addUser(UserAccount user);
+    void addUser(UserAccount user) throws SQLException;
     UserAccount getUserByUsername(String username);
-    List<UserAccount> getAllUsers();
-    void updateUser(UserAccount user);
+    List<UserAccount> getAllUsers() throws SQLException;
+    void updateUser(UserAccount user) throws SQLException;
     void deleteUser(int id);
     public void printAllUsers();
+    public void resetIdentitySequence();
 }

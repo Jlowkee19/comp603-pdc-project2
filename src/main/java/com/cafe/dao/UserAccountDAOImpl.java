@@ -7,12 +7,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
+ */
+
 public class UserAccountDAOImpl implements UserAccountDAO {
 
-    private final Connection conn;
-
-    public UserAccountDAOImpl() throws SQLException {
-        this.conn = Database.getConnection();
+    public UserAccountDAOImpl() {
+        // No longer need to store connection as instance variable
+        // Each method will get a fresh connection
     }
 
     @Override
@@ -20,28 +24,33 @@ public class UserAccountDAOImpl implements UserAccountDAO {
         
          // Check if username already exists
         if (getUserByUsername(user.getUsername()) != null) {
-            System.out.println("Error: Username '" + user.getUsername() + "' already exists!");
-            return; // Or throw an exception
+            throw new RuntimeException("Username '" + user.getUsername() + "' already exists!");
         }
 
-        String sql = "INSERT INTO user_account (firstname, lastname, username, password, role) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "INSERT INTO user_account (firstname, lastname, username, password, role, photo) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, user.getFirstname());
             stmt.setString(2, user.getLastname());
             stmt.setString(3, user.getUsername());
             stmt.setString(4, user.getPassword());
             stmt.setString(5, user.getRole() != null ? user.getRole().getName() : null);
+            stmt.setBytes(6, user.getPhoto());
 
-            stmt.executeUpdate();
+            int result = stmt.executeUpdate();
+            if (result == 0) {
+                throw new RuntimeException("Failed to add user - no rows affected");
+            }
         } catch (SQLException e) {
-            e.printStackTrace(); // Replace with proper logging
+            throw new RuntimeException("Error adding user: " + e.getMessage(), e);
         } 
     }
 
     @Override
     public UserAccount getUserByUsername(String username) {
         String sql = "SELECT * FROM user_account WHERE username = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
 
@@ -52,6 +61,7 @@ public class UserAccountDAOImpl implements UserAccountDAO {
                 user.setLastname(rs.getString("lastname"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
+                user.setPhoto(rs.getBytes("photo"));
 
                 // assuming Role is a simple object
                 user.setRole(new com.cafe.model.Role(null, rs.getString("role")));
@@ -65,11 +75,12 @@ public class UserAccountDAOImpl implements UserAccountDAO {
     }
 
     @Override
-    public List<UserAccount> getAllUsers() {
+    public List<UserAccount> getAllUsers() throws SQLException {
         List<UserAccount> users = new ArrayList<>();
         String sql = "SELECT * FROM user_account";
 
-        try (Statement stmt = conn.createStatement();
+        try (Connection connection = Database.getConnection();
+             Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
@@ -79,50 +90,56 @@ public class UserAccountDAOImpl implements UserAccountDAO {
                 user.setLastname(rs.getString("lastname"));
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
+                user.setPhoto(rs.getBytes("photo"));
                 user.setRole(new com.cafe.model.Role(null, rs.getString("role")));
 
                 users.add(user);
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error retrieving users: " + e.getMessage(), e);
         }
 
         return users;
     }
 
     @Override
-    public void updateUser(UserAccount user) {
-        String sql = "UPDATE user_account SET firstname=?, lastname=?, password=?, role=? WHERE username=?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public void updateUser(UserAccount user) throws SQLException {
+        String sql = "UPDATE user_account SET firstname=?, lastname=?, password=?, role=?, photo=? WHERE id=?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, user.getFirstname());
             stmt.setString(2, user.getLastname());
             stmt.setString(3, user.getPassword());
             stmt.setString(4, user.getRole() != null ? user.getRole().getName() : null);
-            stmt.setString(5, user.getUsername());
+            stmt.setBytes(5, user.getPhoto());
+            stmt.setLong(6, user.getId());
 
-            stmt.executeUpdate();
+            int affected = stmt.executeUpdate();
+            if (affected == 0) {
+                throw new RuntimeException("User not found with ID: " + user.getId());
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error updating user: " + e.getMessage(), e);
         }
     }
 
     @Override
     public void deleteUser(int id) {
         String sql = "DELETE FROM user_account WHERE id = ?";
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             int affected = stmt.executeUpdate();
             if (affected > 0) {
                 System.out.println("User with ID " + id + " deleted successfully.");
             } else {
-                System.out.println("No user found with ID " + id + ".");
+                throw new RuntimeException("No user found with ID " + id + ".");
             }
 
         } catch (SQLException e) {
-            System.err.println("Error deleting user: " + e.getMessage());
+            throw new RuntimeException("Error deleting user: " + e.getMessage(), e);
         }
     }
     
@@ -137,11 +154,55 @@ public class UserAccountDAOImpl implements UserAccountDAO {
     
 
    public void printAllUsers() {
-        List<UserAccount> users = getAllUsers();
-        System.out.println("=== User Accounts ===");
-        for (UserAccount user : users) {
-            System.out.println(user);
+        try {
+            List<UserAccount> users = getAllUsers();
+            System.out.println("=== User Accounts ===");
+            for (UserAccount user : users) {
+                System.out.println(user);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error printing users: " + e.getMessage());
         }
+    }
+    
+    public void resetIdentitySequence() {
+        try (Connection connection = Database.getConnection()) {
+            // Get the maximum current ID
+            String maxIdSql = "SELECT COALESCE(MAX(id), 0) FROM user_account";
+            long maxId = 0;
+            
+            try (PreparedStatement stmt = connection.prepareStatement(maxIdSql);
+                 ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    maxId = rs.getLong(1);
+                }
+            }
+            
+            // Reset the identity sequence to start from maxId + 1
+            String alterSql = "ALTER TABLE user_account ALTER COLUMN id RESTART WITH " + (maxId + 1);
+            try (Statement stmt = connection.createStatement()) {
+                stmt.executeUpdate(alterSql);
+                System.out.println("Identity sequence reset to start from: " + (maxId + 1));
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error resetting identity sequence: " + e.getMessage());
+        }
+    }
+    
+    public long getNextIdentityValue() {
+        try (Connection connection = Database.getConnection()) {
+            String sql = "SELECT MAX(id) + 1 AS next_id FROM user_account";
+            try (PreparedStatement stmt = connection.prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("next_id");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting next identity value: " + e.getMessage());
+        }
+        return 1; // Default if table is empty
     }
 
 }

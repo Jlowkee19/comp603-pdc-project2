@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Other/SQLTemplate.sql to edit this template
  */
 /**
- * Author:  justlowkee
+ * Author:  18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  * Created: 1 Jun 2025
  */
 
@@ -35,6 +35,9 @@ VALUES ('Admin', 'User', 'admin', 'admin123', 'Administrator');
 
 INSERT INTO user_account (firstname, lastname, username, password, role) 
 VALUES ('Lorenz', 'Soriano', 'enz', 'whoyou123', 'Barista');
+
+-- Reset identity sequence to ensure proper ordering for new users
+ALTER TABLE user_account ALTER COLUMN id RESTART WITH 3;
 
 -- Create menu items table
 CREATE TABLE menu_items (

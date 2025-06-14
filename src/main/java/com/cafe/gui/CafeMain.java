@@ -4,6 +4,7 @@ import com.cafe.dao.MenuItemDAO;
 import com.cafe.dao.MenuItemDAOImpl;
 import com.cafe.dao.UserAccountDAOImpl;
 import com.cafe.gui.dialogs.PaymentDialog;
+import com.cafe.gui.dialogs.UserAccDialog;
 import com.cafe.model.MenuItem;
 import com.cafe.model.Payment;
 import com.cafe.model.Receipt;
@@ -35,8 +36,9 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Enzo
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public class CafeMain extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CafeMain.class.getName());
@@ -808,7 +810,15 @@ public class CafeMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuUserActionPerformed
 
     private void jMenuItemUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemUserActionPerformed
-
+        // Open User Account Management Dialog
+        try {
+            UserAccDialog userDialog = new UserAccDialog();
+            userDialog.setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error opening User Management: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jMenuItemUserActionPerformed
 
     private void jButtonNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewActionPerformed
