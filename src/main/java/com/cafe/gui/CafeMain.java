@@ -152,9 +152,6 @@ public class CafeMain extends javax.swing.JFrame {
             categoryButton.setFocusPainted(false);
             categoryButton.setBorder(BorderFactory.createRaisedBevelBorder());
             
-            // Apply FlatLaf button styling
-            categoryButton.putClientProperty(FlatClientProperties.STYLE, 
-                "arc: 8; borderWidth: 0; focusWidth: 0; innerFocusWidth: 0;");
             
             categoryButton.addActionListener(new ActionListener() {
                 @Override
@@ -196,9 +193,6 @@ public class CafeMain extends javax.swing.JFrame {
             itemButton.setBorder(BorderFactory.createLineBorder(new Color(0, 102, 153), 2));
             itemButton.setFocusPainted(false);
             
-            // Apply FlatLaf menu item button styling
-            itemButton.putClientProperty(FlatClientProperties.STYLE, 
-                "arc: 8; borderWidth: 2; focusWidth: 0; innerFocusWidth: 0;");
             
             itemButton.addActionListener(new ActionListener() {
                 @Override
