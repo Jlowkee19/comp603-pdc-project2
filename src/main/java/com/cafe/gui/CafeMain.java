@@ -3,7 +3,9 @@ package com.cafe.gui;
 import com.cafe.dao.MenuItemDAO;
 import com.cafe.dao.MenuItemDAOImpl;
 import com.cafe.dao.UserAccountDAOImpl;
+import com.cafe.gui.dialogs.PaymentDialog;
 import com.cafe.model.MenuItem;
+import com.cafe.model.Payment;
 import com.cafe.model.UserAccount;
 import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.Color;
@@ -313,6 +315,13 @@ public class CafeMain extends javax.swing.JFrame {
         jLabelAmountDueTotal.setText("0.00");
         jLabelCash.setText("0.00");
         jLabelChange.setText("0.00");
+        
+        // Clear any table selection
+        jTable.clearSelection();
+        
+        // Refresh the table display
+        jTable.revalidate();
+        jTable.repaint();
     }
     
     private void logout() {
@@ -858,8 +867,73 @@ public class CafeMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonHoldActionPerformed
 
     private void jButtonPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPaymentActionPerformed
-       
+        processPayment();
     }//GEN-LAST:event_jButtonPaymentActionPerformed
+    
+    private void processPayment() {
+        DefaultTableModel model = (DefaultTableModel) jTable.getModel();
+        
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, 
+                "No items in order. Please add items before proceeding to payment.",
+                "Empty Order", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        try {
+            double totalAmount = Double.parseDouble(jLabelAmountDueTotal.getText());
+            
+            if (totalAmount <= 0) {
+                JOptionPane.showMessageDialog(this, 
+                    "Invalid order total. Please check your order.",
+                    "Invalid Total", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            Long orderId = System.currentTimeMillis();
+            
+            PaymentDialog paymentDialog = new PaymentDialog(orderId, totalAmount, new PaymentDialog.PaymentCallback() {
+                @Override
+                public void onPaymentComplete(Payment processedPayment) {
+                    // Clear the order first
+                    clearOrder();
+                    
+                    // Show success message
+                    String successMessage = String.format(
+                        "Payment processed successfully!\n\n" +
+                        "Transaction ID: %s\n" +
+                        "Amount: $%.2f\n" +
+                        "Method: %s\n\n" +
+                        "Order has been cleared and ready for next customer.",
+                        processedPayment.getTransactionId(),
+                        processedPayment.getAmount(),
+                        processedPayment.getPaymentMethod()
+                    );
+                    
+                    JOptionPane.showMessageDialog(CafeMain.this, 
+                        successMessage,
+                        "Payment Complete", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
+                
+                @Override
+                public void onPaymentCancelled() {
+                    System.out.println("Payment was cancelled");
+                }
+            });
+            
+            paymentDialog.setVisible(true);
+            
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error reading order total. Please try again.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Unexpected error: " + e.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     private void jButtonMinusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMinusActionPerformed
         modifySelectedItemQuantity(-1);
