@@ -7,8 +7,11 @@ package com.cafe.gui.dialogs;
 import com.cafe.dao.PaymentDAO;
 import com.cafe.dao.PaymentDAOImpl;
 import com.cafe.model.Payment;
+import com.cafe.model.Receipt;
+import com.cafe.service.ReceiptService;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.util.List;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 
@@ -24,12 +27,15 @@ public class PaymentDialog extends javax.swing.JFrame {
     }
     
     private PaymentDAO paymentDAO;
+    private ReceiptService receiptService;
     private double totalAmount;
     private Long orderId;
     private Payment processedPayment;
     private DecimalFormat currencyFormat;
     private ButtonGroup paymentMethodGroup;
     private PaymentCallback callback;
+    private List<Receipt.ReceiptItem> orderItems;
+    private String cashierName;
 
     /**
      * Creates new form PaymentDialog
@@ -62,8 +68,24 @@ public class PaymentDialog extends javax.swing.JFrame {
         setupOrderDetails();
     }
     
+    /**
+     * Creates new form PaymentDialog with order details, items, and callback
+     */
+    public PaymentDialog(Long orderId, double totalAmount, List<Receipt.ReceiptItem> orderItems, 
+                        PaymentCallback callback, String cashierName) {
+        this.orderId = orderId;
+        this.totalAmount = totalAmount;
+        this.orderItems = orderItems;
+        this.callback = callback;
+        this.cashierName = cashierName;
+        initComponents();
+        initializePaymentDialog();
+        setupOrderDetails();
+    }
+    
     private void initializePaymentDialog() {
         paymentDAO = new PaymentDAOImpl();
+        receiptService = new ReceiptService();
         currencyFormat = new DecimalFormat("$#,##0.00");
         
         paymentMethodGroup = new ButtonGroup();
@@ -138,13 +160,12 @@ public class PaymentDialog extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Payment Processing");
-        setPreferredSize(new java.awt.Dimension(400, 300));
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("October Compressed Tamil", 1, 18)); // NOI18N
-        jLabel1.setText("Text Amount:");
+        jLabel1.setText("Total Amount:");
 
         jLabel2.setFont(new java.awt.Font("October Compressed Tamil", 1, 18)); // NOI18N
         jLabel2.setText("$ 0.00");
@@ -321,6 +342,21 @@ public class PaymentDialog extends javax.swing.JFrame {
             payment.setStatus("COMPLETED");
             
             processedPayment = paymentDAO.createPayment(payment);
+            
+            // Generate receipt if order items are available
+            if (orderItems != null && !orderItems.isEmpty()) {
+                try {
+                    Receipt receipt = new Receipt(orderId, orderItems, processedPayment);
+                    receipt.setCashierName(cashierName);
+                    
+                    // Show receipt options (print/save)
+                    receiptService.showReceiptOptions(receipt);
+                } catch (Exception receiptError) {
+                    System.err.println("Error generating receipt: " + receiptError.getMessage());
+                    receiptError.printStackTrace();
+                    // Continue with payment completion even if receipt fails
+                }
+            }
             
             if (callback != null) {
                 callback.onPaymentComplete(processedPayment);

@@ -6,6 +6,7 @@ import com.cafe.dao.UserAccountDAOImpl;
 import com.cafe.gui.dialogs.PaymentDialog;
 import com.cafe.model.MenuItem;
 import com.cafe.model.Payment;
+import com.cafe.model.Receipt;
 import com.cafe.model.UserAccount;
 import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.Color;
@@ -15,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -313,8 +315,7 @@ public class CafeMain extends javax.swing.JFrame {
         
         // Reset totals
         jLabelAmountDueTotal.setText("0.00");
-        jLabelCash.setText("0.00");
-        jLabelChange.setText("0.00");
+        
         
         // Clear any table selection
         jTable.clearSelection();
@@ -444,16 +445,9 @@ public class CafeMain extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabelAmountDueTotal = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabelCash = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabelChange = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jButtonNew = new javax.swing.JButton();
-        jButtonHold = new javax.swing.JButton();
         jButtonPayment = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jButtonMinus = new javax.swing.JButton();
@@ -487,7 +481,7 @@ public class CafeMain extends javax.swing.JFrame {
 
         jPanel5.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 102, 153), 1, true), "Menu", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Courier New", 0, 24), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 102, 153), 1, true), "Menu", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Courier New", 1, 24), new java.awt.Color(0, 102, 153))); // NOI18N
         jPanel12.setLayout(new java.awt.BorderLayout());
 
         jPanelShowMenu.setPreferredSize(new java.awt.Dimension(594, 1000));
@@ -496,72 +490,32 @@ public class CafeMain extends javax.swing.JFrame {
 
         jPanel12.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 102, 153)), "Orders", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Courier New", 0, 24), new java.awt.Color(0, 102, 153))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(0, 102, 153)), "Orders", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Courier New", 1, 24), new java.awt.Color(0, 102, 153))); // NOI18N
         jPanel1.setPreferredSize(new java.awt.Dimension(464, 400));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, java.awt.Color.gray));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel10.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Sora", 1, 48)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(102, 102, 102));
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel10.setText("Total:");
         jLabel10.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 180, 50));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 150, 100));
 
         jLabelAmountDueTotal.setBackground(new java.awt.Color(51, 51, 51));
-        jLabelAmountDueTotal.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
+        jLabelAmountDueTotal.setFont(new java.awt.Font("Sora", 1, 48)); // NOI18N
         jLabelAmountDueTotal.setForeground(new java.awt.Color(102, 102, 102));
         jLabelAmountDueTotal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabelAmountDueTotal.setText("0.00");
         jLabelAmountDueTotal.setPreferredSize(new java.awt.Dimension(110, 50));
-        jPanel2.add(jLabelAmountDueTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 130, 50));
+        jPanel2.add(jLabelAmountDueTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 200, 100));
 
-        jLabel11.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel11.setText("Cash:");
-        jLabel11.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jLabel11.setPreferredSize(new java.awt.Dimension(110, 50));
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 180, 50));
-
-        jLabelCash.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
-        jLabelCash.setForeground(new java.awt.Color(102, 102, 102));
-        jLabelCash.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelCash.setText("0.00");
-        jLabelCash.setPreferredSize(new java.awt.Dimension(110, 50));
-        jPanel2.add(jLabelCash, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, 120, 50));
-
-        jLabel8.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel8.setText("Change:");
-        jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jLabel8.setPreferredSize(new java.awt.Dimension(110, 50));
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 180, 50));
-
-        jLabelChange.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
-        jLabelChange.setForeground(new java.awt.Color(102, 102, 102));
-        jLabelChange.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelChange.setText("0.00");
-        jLabelChange.setPreferredSize(new java.awt.Dimension(110, 50));
-        jPanel2.add(jLabelChange, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, 120, 50));
-
-        jLabel1.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel1.setText("$");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 110, -1, 50));
-
-        jLabel2.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Sora", 1, 48)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
         jLabel2.setText("$");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, -1, -1));
-
-        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel3.setText("$");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 70, -1, 50));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, -1, 100));
 
         jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, java.awt.Color.gray));
 
@@ -574,18 +528,6 @@ public class CafeMain extends javax.swing.JFrame {
         jButtonNew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonNewActionPerformed(evt);
-            }
-        });
-
-        jButtonHold.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jButtonHold.setForeground(new java.awt.Color(0, 102, 153));
-        jButtonHold.setMnemonic('H');
-        jButtonHold.setText("Hold");
-        jButtonHold.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        jButtonHold.setPreferredSize(new java.awt.Dimension(150, 50));
-        jButtonHold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonHoldActionPerformed(evt);
             }
         });
 
@@ -609,23 +551,18 @@ public class CafeMain extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonNew, javax.swing.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
-                    .addComponent(jButtonHold, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(jButtonPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButtonNew, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButtonHold, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addComponent(jButtonPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(64, 64, 64))
         );
-
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jButtonMinus.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jButtonMinus.setText("-");
@@ -636,7 +573,6 @@ public class CafeMain extends javax.swing.JFrame {
                 jButtonMinusActionPerformed(evt);
             }
         });
-        jPanel7.add(jButtonMinus, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 25));
 
         jButtonAdd.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jButtonAdd.setText("+");
@@ -647,7 +583,6 @@ public class CafeMain extends javax.swing.JFrame {
                 jButtonAddActionPerformed(evt);
             }
         });
-        jPanel7.add(jButtonAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, 50, 25));
 
         jButtonEditQty.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jButtonEditQty.setText("Edit");
@@ -658,7 +593,6 @@ public class CafeMain extends javax.swing.JFrame {
                 jButtonEditQtyActionPerformed(evt);
             }
         });
-        jPanel7.add(jButtonEditQty, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 0, 70, 25));
 
         jButtonRemoveQty.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jButtonRemoveQty.setText("Remove");
@@ -669,7 +603,27 @@ public class CafeMain extends javax.swing.JFrame {
                 jButtonRemoveQtyActionPerformed(evt);
             }
         });
-        jPanel7.add(jButtonRemoveQty, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, 90, 25));
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jButtonMinus, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jButtonEditQty, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jButtonRemoveQty, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jButtonMinus, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jButtonEditQty, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jButtonRemoveQty, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         jTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -715,14 +669,13 @@ public class CafeMain extends javax.swing.JFrame {
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel19Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -862,13 +815,27 @@ public class CafeMain extends javax.swing.JFrame {
         clearOrder();
     }//GEN-LAST:event_jButtonNewActionPerformed
 
-    private void jButtonHoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonHoldActionPerformed
-
-    }//GEN-LAST:event_jButtonHoldActionPerformed
-
     private void jButtonPaymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPaymentActionPerformed
         processPayment();
     }//GEN-LAST:event_jButtonPaymentActionPerformed
+    
+    private List<Receipt.ReceiptItem> getOrderItemsFromTable() {
+        DefaultTableModel model = (DefaultTableModel) jTable.getModel();
+        List<Receipt.ReceiptItem> items = new ArrayList<>();
+        
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String itemName = (String) model.getValueAt(i, 0);
+            String priceStr = (String) model.getValueAt(i, 1);
+            int quantity = (Integer) model.getValueAt(i, 2);
+            
+            // Parse price (remove $ and any formatting)
+            double unitPrice = Double.parseDouble(priceStr.replace("$", "").replace(",", ""));
+            
+            items.add(new Receipt.ReceiptItem(itemName, quantity, unitPrice));
+        }
+        
+        return items;
+    }
     
     private void processPayment() {
         DefaultTableModel model = (DefaultTableModel) jTable.getModel();
@@ -891,8 +858,18 @@ public class CafeMain extends javax.swing.JFrame {
             }
             
             Long orderId = System.currentTimeMillis();
+            List<Receipt.ReceiptItem> orderItems = null;
+            String cashierName = "System";
             
-            PaymentDialog paymentDialog = new PaymentDialog(orderId, totalAmount, new PaymentDialog.PaymentCallback() {
+            try {
+                orderItems = getOrderItemsFromTable();
+                cashierName = currentUser != null ? currentUser.getUsername() : "System";
+            } catch (Exception e) {
+                System.err.println("Error getting order items: " + e.getMessage());
+                // Continue without receipt functionality
+            }
+            
+            PaymentDialog paymentDialog = new PaymentDialog(orderId, totalAmount, orderItems, new PaymentDialog.PaymentCallback() {
                 @Override
                 public void onPaymentComplete(Payment processedPayment) {
                     // Clear the order first
@@ -920,7 +897,7 @@ public class CafeMain extends javax.swing.JFrame {
                 public void onPaymentCancelled() {
                     System.out.println("Payment was cancelled");
                 }
-            });
+            }, cashierName);
             
             paymentDialog.setVisible(true);
             
@@ -997,20 +974,13 @@ public class CafeMain extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonEditQty;
-    private javax.swing.JButton jButtonHold;
     private javax.swing.JButton jButtonMinus;
     private javax.swing.JButton jButtonNew;
     private javax.swing.JButton jButtonPayment;
     private javax.swing.JButton jButtonRemoveQty;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelAmountDueTotal;
-    private javax.swing.JLabel jLabelCash;
-    private javax.swing.JLabel jLabelChange;
     private javax.swing.JMenu jMenuAdministration;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemChangePassword;

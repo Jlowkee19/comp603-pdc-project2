@@ -23,6 +23,9 @@ public class PaymentDAOImpl implements PaymentDAO {
 
     @Override
     public Payment createPayment(Payment payment) throws SQLException {
+        // Ensure payments table exists
+        createPaymentsTableIfNotExists();
+        
         String sql = "INSERT INTO payments (order_id, amount, payment_method, status, payment_date, transaction_id, change_amount) VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = Database.getConnection();
@@ -133,5 +136,29 @@ public class PaymentDAOImpl implements PaymentDAO {
         payment.setTransactionId(rs.getString("transaction_id"));
         payment.setChangeAmount(rs.getDouble("change_amount"));
         return payment;
+    }
+    
+    private void createPaymentsTableIfNotExists() throws SQLException {
+        String createTableSQL = "CREATE TABLE payments (" +
+            "id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
+            "order_id BIGINT, " +
+            "amount DECIMAL(10,2) NOT NULL CHECK (amount >= 0), " +
+            "payment_method VARCHAR(20) NOT NULL, " +
+            "status VARCHAR(20) DEFAULT 'PENDING', " +
+            "payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+            "transaction_id VARCHAR(100), " +
+            "change_amount DECIMAL(10,2) DEFAULT 0" +
+            ")";
+        
+        try (Connection conn = Database.getConnection();
+             Statement stmt = conn.createStatement()) {
+            
+            stmt.executeUpdate(createTableSQL);
+        } catch (SQLException e) {
+            // Ignore "table already exists" error
+            if (!e.getSQLState().equals("X0Y32")) {
+                throw e;
+            }
+        }
     }
 }
