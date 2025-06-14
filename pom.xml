@@ -90,7 +90,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com.cafe.inventory.CafeSystem</mainClass>
+                    <mainClass>com.cafe.CafeApp</mainClass>
                 </configuration>
             </plugin>
             
@@ -102,7 +102,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.cafe.inventory.CafeSystem</mainClass>
+                            <mainClass>com.cafe.CafeApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
