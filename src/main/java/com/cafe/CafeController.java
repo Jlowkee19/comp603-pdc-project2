@@ -12,20 +12,30 @@ import java.sql.SQLException;
 
 public class CafeController {
 
-    private LoginFrame loginFrame = new LoginFrame();
+    private LoginFrame loginFrame;
     private CafeMain cafeMain = new CafeMain();
 
     public CafeController() {
-        loginFrame.setVisible(true);
+        setupLoginFrame();
 
+        cafeMain.setLogoutCallback(() -> {
+           setupLoginFrame();
+            
+        });
+    }
+    
+    public void setupLoginFrame() {
+        loginFrame = new LoginFrame();
+        loginFrame.setVisible(true);
+        
         loginFrame.getLoginButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleLogin();
-            }
-        });
+            handleLogin();
+        }
+    });
     }
-
+    
     private void handleLogin() {
          String username = loginFrame.getUsername();
          String password = loginFrame.getPassword();
@@ -50,8 +60,13 @@ public class CafeController {
 
          // Now check the validation result
          if (isValid) {
+             // Get the user and set it in the main window
+             UserAccount user = dao.getUserByUsername(username);
+             cafeMain.setCurrentUser(user);
+             
              loginFrame.dispose();
              cafeMain.setVisible(true);
+
          } else {
              loginFrame.showError("Invalid username or password");
          }

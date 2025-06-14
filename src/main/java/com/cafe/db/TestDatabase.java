@@ -4,8 +4,11 @@
  */
 package com.cafe.db;
 
+import com.cafe.dao.UserAccountDAOImpl;
+import com.cafe.model.UserAccount;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -17,19 +20,15 @@ public class TestDatabase {
         System.out.println("_________________________________");
         
         try {
-            // Test connection 
-            Connection conn = Database.getConnection();
-            System.out.println("Database connection succestful!");
+           // Test connection 
+           Connection conn = Database.getConnection();
+           System.out.println("Database connection succestful!");
             
-            if (conn != null && !conn.isClosed()) {
-                System.out.println("Connection is active");
-        }
-            // Test second connetion call 
-            Connection conn2 = Database.getConnection();
-            System.out.println("Second connection call successful!");
+           // Display all users
+           displayUsers();
             
-            // Shutdown test
-            Database.shutdownDatabase();
+           // Shutdown test
+           Database.shutdownDatabase();
         
        } catch (SQLException e) {
            System.err.println("Database error: " + e.getMessage());
@@ -42,4 +41,20 @@ public class TestDatabase {
         System.out.println("_________________________________");
         System.out.println("TEST COMPLETE");
     }
+    
+    private static void displayUsers() throws SQLException {
+        System.out.println("\n === USER ACCOUNTS ===");
+        UserAccountDAOImpl userDAO = new UserAccountDAOImpl();
+        List<UserAccount> users = userDAO.getAllUsers();
+        
+        if (users.isEmpty()) {
+            System.out.println("No users found in database.");
+        } else {
+            for (UserAccount user : users) {
+                System.out.println(user);
+            }
+        }
+    }
+    
+    
 }
