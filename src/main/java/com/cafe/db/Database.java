@@ -64,8 +64,8 @@ public class Database {
                         try {
                             stmt.executeUpdate(statement);
                         } catch (SQLException e) {
-                            // Ignore "already exists" errors
-                            if (!e.getSQLState().equals("X0Y32")) {
+                            // Ignore "already exists" errors and duplicate key errors
+                            if (!e.getSQLState().equals("X0Y32") && !e.getSQLState().equals("23505")) {
                                 throw e;
                             }
                         }

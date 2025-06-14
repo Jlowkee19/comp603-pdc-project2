@@ -8,6 +8,11 @@ import com.cafe.db.Database;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.sql.SQLException;
 
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
 /**
  * Main application class for the Cafe Management System
  * @author justlowkee
@@ -55,7 +60,6 @@ public class CafeApp {
         
         // Database is ready
         System.out.println("Tables created and initialized successfully!");
-        
         System.out.println("Database setup complete!");
     }
 

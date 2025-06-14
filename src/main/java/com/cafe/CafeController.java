@@ -10,6 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
+
+/**
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
+ */
+
+
 public class CafeController {
 
     private LoginFrame loginFrame;
@@ -24,18 +31,18 @@ public class CafeController {
         });
     }
     
-    private void setupLoginFrame() {
+    public void setupLoginFrame() {
         loginFrame = new LoginFrame();
         loginFrame.setVisible(true);
-
+        
         loginFrame.getLoginButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleLogin();
-            }
-        });
+            handleLogin();
+        }
+    });
     }
-
+    
     private void handleLogin() {
          String username = loginFrame.getUsername();
          String password = loginFrame.getPassword();
@@ -49,14 +56,8 @@ public class CafeController {
          UserAccountDAOImpl dao;
          boolean isValid = false; // Initialize the variable
 
-         try {
-             dao = new UserAccountDAOImpl();
-             isValid = dao.validateLogin(username, password);
-         } catch (SQLException e) {
-             e.printStackTrace();
-             loginFrame.showError("Database connection error. Please try again.");
-             return; // Exit the method if there's a database error
-         }
+         dao = new UserAccountDAOImpl();
+         isValid = dao.validateLogin(username, password);
 
          // Now check the validation result
          if (isValid) {
@@ -66,6 +67,7 @@ public class CafeController {
              
              loginFrame.dispose();
              cafeMain.setVisible(true);
+
          } else {
              loginFrame.showError("Invalid username or password");
          }
