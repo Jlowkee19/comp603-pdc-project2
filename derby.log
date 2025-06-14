@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Sat Jun 14 22:45:37 NZST 2025:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0197-6e0b-822b-00000f00fa80 
+Sun Jun 15 02:04:50 NZST 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.17.1.0 - (1913217): instance a816c00e-0197-6ec1-e415-00000f391d20 
 on database directory /Users/justlowkee/Documents/GitHub/comp603-pdc-project2/cafeDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1cf4f579 
 Loaded from file:/Users/justlowkee/.m2/repository/org/apache/derby/derby/10.17.1.0/derby-10.17.1.0.jar
 java.vendor=Oracle Corporation
@@ -11,3 +11,9 @@ os.arch=aarch64
 os.version=15.5
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Sun Jun 15 02:05:01 NZST 2025: Shutting down Derby engine
+----------------------------------------------------------------
+Sun Jun 15 02:05:01 NZST 2025:
+Shutting down instance a816c00e-0197-6ec1-e415-00000f391d20 on database directory /Users/justlowkee/Documents/GitHub/comp603-pdc-project2/cafeDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1cf4f579 
+----------------------------------------------------------------

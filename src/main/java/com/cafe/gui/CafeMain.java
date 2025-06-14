@@ -3,6 +3,7 @@ package com.cafe.gui;
 import com.cafe.dao.MenuItemDAO;
 import com.cafe.dao.MenuItemDAOImpl;
 import com.cafe.dao.UserAccountDAOImpl;
+import com.cafe.db.Database;
 import com.cafe.gui.dialogs.PaymentDialog;
 import com.cafe.gui.dialogs.UserAccDialog;
 import com.cafe.model.MenuItem;
@@ -802,7 +803,16 @@ public class CafeMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemChangePasswordActionPerformed
 
     private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
-
+        int response = JOptionPane.showConfirmDialog(this, 
+            "Are you sure you want to exit?", 
+            "Confirm Exit", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (response == JOptionPane.YES_OPTION) {
+            Database.shutdownDerby();
+            System.exit(0);
+        }
     }//GEN-LAST:event_jMenuItemExitActionPerformed
 
     private void jMenuUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuUserActionPerformed
