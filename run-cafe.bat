@@ -15,7 +15,7 @@ if %errorlevel% neq 0 (
 )
 
 REM Check if JAR file exists
-set JAR_FILE=target\CafeInventorySystem-1.0-SNAPSHOT-executable.jar
+set JAR_FILE=target\CafeSystem-1.0-SNAPSHOT-executable.jar
 if not exist "%JAR_FILE%" (
     echo ❌ Executable JAR file not found: %JAR_FILE%
     echo Please run 'mvn clean package' to build the application first

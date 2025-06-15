@@ -77,7 +77,7 @@ public class CafeMain extends javax.swing.JFrame {
         loadMenuItems();
     }
     
-    public void setLogoutCallback(Runnable callback) {
+    public void setLogoutCallback(Runnable callback){
         this.logoutCallback = callback;
     }
     
@@ -86,107 +86,6 @@ public class CafeMain extends javax.swing.JFrame {
             String displayName = currentUser.getFirstname() + " " + currentUser.getLastname();
             jMenuUser.setText(displayName);
         } else {
-            jMenuUser.setText("User");
-        }
-    }
-    
-    private void logout() {
-        int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to log out?",
-            "Logout Confirmation",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-        );
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            // Clear current user
-            currentUser = null;
-            updateMenuText();
-            
-            // Hide main window
-            this.setVisible(false);
-            
-            // Call the logout callback if available
-            if (logoutCallback != null) {
-                logoutCallback.run();
-            }
-        }
-    }
-    
-    private void openChangePasswordDialog() {
-        if (currentUser == null) {
-            JOptionPane.showMessageDialog(this, "No user is currently logged in.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        // Create password fields
-        JPasswordField currentPasswordField = new JPasswordField(20);
-        JPasswordField newPasswordField = new JPasswordField(20);
-        JPasswordField confirmPasswordField = new JPasswordField(20);
-        
-        // Create panel for dialog
-        JPanel panel = new JPanel(new GridLayout(3, 2, 5, 5));
-        panel.add(new JLabel("Current Password:"));
-        panel.add(currentPasswordField);
-        panel.add(new JLabel("New Password:"));
-        panel.add(newPasswordField);
-        panel.add(new JLabel("Confirm New Password:"));
-        panel.add(confirmPasswordField);
-        
-        int option = JOptionPane.showConfirmDialog(
-            this, 
-            panel, 
-            "Change Password", 
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.PLAIN_MESSAGE
-        );
-        
-        if (option == JOptionPane.OK_OPTION) {
-            String currentPassword = new String(currentPasswordField.getPassword());
-            String newPassword = new String(newPasswordField.getPassword());
-            String confirmPassword = new String(confirmPasswordField.getPassword());
-            
-            // Validate inputs
-            if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            if (!currentPassword.equals(currentUser.getPassword())) {
-                JOptionPane.showMessageDialog(this, "Current password is incorrect.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            if (!newPassword.equals(confirmPassword)) {
-                JOptionPane.showMessageDialog(this, "New passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            if (newPassword.length() < 6) {
-                JOptionPane.showMessageDialog(this, "New password must be at least 6 characters long.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            // Update password
-            try {
-                UserAccountDAOImpl userDAO = new UserAccountDAOImpl();
-                currentUser.setPassword(newPassword);
-                userDAO.updateUser(currentUser);
-                
-                JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                
-                // Clear password fields for security
-                currentPasswordField.setText("");
-                newPasswordField.setText("");
-                confirmPasswordField.setText("");
-                
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(this, "Failed to update password: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-=======
             jMenuUser.setText("User");
         }
     }
@@ -443,7 +342,6 @@ public class CafeMain extends javax.swing.JFrame {
                 // Clear current user
                 currentUser = null;
                 updateMenuText();
->>>>>>> enzo
 
                 // Hide main window
                 this.setVisible(false);
@@ -569,12 +467,6 @@ public class CafeMain extends javax.swing.JFrame {
         jMenuItemExit = new javax.swing.JMenuItem();
         jMenuAdministration = new javax.swing.JMenu();
         jMenuItemUser = new javax.swing.JMenuItem();
-<<<<<<< HEAD
-        jMenuItemCategory = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
-=======
->>>>>>> enzo
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -851,10 +743,6 @@ public class CafeMain extends javax.swing.JFrame {
         });
         jMenuUser.add(jMenuItemLogOut);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> enzo
         jMenuItemChangePassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jMenuItemChangePassword.setText("Change Password");
         jMenuItemChangePassword.addActionListener(new java.awt.event.ActionListener() {
@@ -910,10 +798,6 @@ public class CafeMain extends javax.swing.JFrame {
         logout();
     }//GEN-LAST:event_jMenuItemLogOutActionPerformed
 
-<<<<<<< HEAD
-
-=======
->>>>>>> enzo
     private void jMenuItemChangePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemChangePasswordActionPerformed
         openChangePasswordDialog();
     }//GEN-LAST:event_jMenuItemChangePasswordActionPerformed
@@ -947,22 +831,6 @@ public class CafeMain extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItemUserActionPerformed
 
-<<<<<<< HEAD
-    private void jMenuItemCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCategoryActionPerformed
-     
-    }//GEN-LAST:event_jMenuItemCategoryActionPerformed
-
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-      
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
-
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
- 
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
-
-
-=======
->>>>>>> enzo
     private void jButtonNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewActionPerformed
         clearOrder();
     }//GEN-LAST:event_jButtonNewActionPerformed
@@ -1135,12 +1003,6 @@ public class CafeMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelAmountDueTotal;
     private javax.swing.JMenu jMenuAdministration;
     private javax.swing.JMenuBar jMenuBar1;
-<<<<<<< HEAD
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItemCategory;
-=======
->>>>>>> enzo
     private javax.swing.JMenuItem jMenuItemChangePassword;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemLogOut;

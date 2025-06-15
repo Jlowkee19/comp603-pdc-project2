@@ -12,13 +12,6 @@ CREATE TABLE role (
     name VARCHAR(50) UNIQUE NOT NULL
 );
 
-/* Insert default cafe roles (only if they don't exist) */
-INSERT INTO role (name) SELECT 'ADMIN' FROM SYSIBM.SYSDUMMY1 WHERE NOT EXISTS (SELECT 1 FROM role WHERE name = 'ADMIN');
-INSERT INTO role (name) SELECT 'MANAGER' FROM SYSIBM.SYSDUMMY1 WHERE NOT EXISTS (SELECT 1 FROM role WHERE name = 'MANAGER');
-INSERT INTO role (name) SELECT 'CASHIER' FROM SYSIBM.SYSDUMMY1 WHERE NOT EXISTS (SELECT 1 FROM role WHERE name = 'CASHIER');
-INSERT INTO role (name) SELECT 'BARISTA' FROM SYSIBM.SYSDUMMY1 WHERE NOT EXISTS (SELECT 1 FROM role WHERE name = 'BARISTA');
-INSERT INTO role (name) SELECT 'KITCHEN_STAFF' FROM SYSIBM.SYSDUMMY1 WHERE NOT EXISTS (SELECT 1 FROM role WHERE name = 'KITCHEN_STAFF');
-INSERT INTO role (name) SELECT 'WAITER' FROM SYSIBM.SYSDUMMY1 WHERE NOT EXISTS (SELECT 1 FROM role WHERE name = 'WAITER');
 
 CREATE TABLE user_account (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
@@ -43,8 +36,6 @@ VALUES ('Admin', 'User', 'admin', 'admin123', 'Administrator');
 INSERT INTO user_account (firstname, lastname, username, password, role) 
 VALUES ('Lorenz', 'Soriano', 'enz', 'whoyou123', 'Barista');
 
--- Reset identity sequence to ensure proper ordering for new users
-ALTER TABLE user_account ALTER COLUMN id RESTART WITH 3;
 
 -- Create menu items table
 CREATE TABLE menu_items (

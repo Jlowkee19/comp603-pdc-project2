@@ -161,30 +161,6 @@ public class UserAccountDAOImpl implements UserAccountDAO {
         }
     }
     
-    public void resetIdentitySequence() {
-        try (Connection connection = Database.getConnection()) {
-            // Get the maximum current ID
-            String maxIdSql = "SELECT COALESCE(MAX(id), 0) FROM user_account";
-            long maxId = 0;
-            
-            try (PreparedStatement stmt = connection.prepareStatement(maxIdSql);
-                 ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    maxId = rs.getLong(1);
-                }
-            }
-            
-            // Reset the identity sequence to start from maxId + 1
-            String alterSql = "ALTER TABLE user_account ALTER COLUMN id RESTART WITH " + (maxId + 1);
-            try (Statement stmt = connection.createStatement()) {
-                stmt.executeUpdate(alterSql);
-                System.out.println("Identity sequence reset to start from: " + (maxId + 1));
-            }
-            
-        } catch (SQLException e) {
-            System.err.println("Error resetting identity sequence: " + e.getMessage());
-        }
-    }
     
     public long getNextIdentityValue() {
         try (Connection connection = Database.getConnection()) {

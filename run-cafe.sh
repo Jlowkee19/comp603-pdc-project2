@@ -20,7 +20,7 @@ if [ "$JAVA_VERSION" -lt 21 ]; then
 fi
 
 # Check if JAR file exists
-JAR_FILE="target/CafeInventorySystem-1.0-SNAPSHOT-executable.jar"
+JAR_FILE="target/CafeSystem-1.0-SNAPSHOT-executable.jar"
 if [ ! -f "$JAR_FILE" ]; then
     echo "❌ Executable JAR file not found: $JAR_FILE"
     echo "Please run 'mvn clean package' to build the application first"
