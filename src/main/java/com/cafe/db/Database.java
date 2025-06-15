@@ -6,6 +6,11 @@ import java.sql.*;
 import java.util.Properties;
 import java.io.InputStream;
 
+/**
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
+ */
+
 public class Database {
     
     private static Connection conn = null;

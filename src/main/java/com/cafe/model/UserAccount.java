@@ -4,6 +4,11 @@ package com.cafe.model;
 import java.io.Serializable;
 import java.util.Arrays;
 
+/**
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
+ */
+
 public class UserAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;

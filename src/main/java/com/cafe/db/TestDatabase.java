@@ -12,8 +12,9 @@ import java.util.List;
 
 /**
  *
- * @author Enzo
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public class TestDatabase {
     public static void main(String args[]){
         System.out.println("TESTING DERBY DATABASE CONNECTION");

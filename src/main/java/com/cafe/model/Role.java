@@ -1,5 +1,10 @@
 package com.cafe.model;
 
+/**
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
+ */
+
 
 public class Role {
     private Long id;

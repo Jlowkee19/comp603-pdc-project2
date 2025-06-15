@@ -15,8 +15,9 @@ import javax.swing.UIManager;
 
 /**
  *
- * @author Enzo
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public class LoginFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginFrame.class.getName());

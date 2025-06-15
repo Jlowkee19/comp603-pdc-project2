@@ -7,9 +7,11 @@ import com.cafe.gui.dialogs.PaymentDialog;
 import javax.swing.SwingUtilities;
 
 /**
- * Test class for PaymentDialog functionality
- * @author justlowkee
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
+
 public class PaymentDialogTest {
     
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
 # Cafe Management System - Executable Guide
 
 **Authors:** Lorenz Soriano (18011129) & Phoebe Cruz (21143576)  
-**Course:** COMP603 - Programming for Database Connectivity
+**Course:** COMP603 - Program Design and Construction
 
 ---
 
@@ -35,16 +35,20 @@ java -jar target/CafeInventorySystem-1.0-SNAPSHOT-executable.jar
 ## 📁 File Structure
 
 ### Main Executable
+
 - `target/CafeInventorySystem-1.0-SNAPSHOT-executable.jar` - Complete standalone application
 
 ### Launcher Scripts
+
 - `run-cafe.sh` - Unix/Linux/macOS launcher with system checks
 - `run-cafe.bat` - Windows launcher with system checks
 
 ### Supporting Files
+
 - `cafeDB/` - Derby database files (auto-created)
 - `receipts/` - Generated receipt files
 - `src/main/resources/images/` - User profile photos
+- `src/main/resources/icons/` - For icons specifically 
 
 ---
 
@@ -52,10 +56,10 @@ java -jar target/CafeInventorySystem-1.0-SNAPSHOT-executable.jar
 
 The application comes with pre-configured accounts:
 
-| Role | Username | Password | Access Level |
-|------|----------|----------|-------------|
-| **Administrator** | `admin` | `admin123` | Full system access, user management |
-| **Staff** | `enz` | `whoyou123` | Menu operations, order processing |
+| Role              | Username | Password    | Access Level                        |
+| ----------------- | -------- | ----------- | ----------------------------------- |
+| **Administrator** | `admin`  | `admin123`  | Full system access, user management |
+| **Staff**         | `enz`    | `whoyou123` | Menu operations, order processing   |
 
 ---
 
@@ -76,22 +80,26 @@ mvn clean package
 ## 🎯 Key Features
 
 ### User Management
+
 - Complete CRUD operations for user accounts
 - Photo upload functionality
 - Form validation and placeholder text
 - Role-based access control
 
 ### Menu System
+
 - Dynamic menu loading from database
 - Category-based organization
 - Real-time inventory management
 
 ### Order Processing
+
 - Shopping cart functionality
 - Payment processing with multiple methods
 - Automatic receipt generation
 
 ### Database
+
 - Embedded Derby database (no setup required)
 - Automatic table creation and initialization
 - Proper connection management
@@ -103,44 +111,25 @@ mvn clean package
 ### Common Issues
 
 **"Java is not installed or not in PATH"**
+
 - Install Java 21 or later from [Oracle](https://www.oracle.com/java/technologies/downloads/) or [OpenJDK](https://openjdk.org/)
 - Ensure Java is added to your system PATH
 
 **"Executable JAR file not found"**
+
 - Run `mvn clean package` to build the application
 - Ensure you're in the project root directory
 
 **Database connection errors**
+
 - The application automatically creates the Derby database
 - Ensure you have write permissions in the project directory
 - Database files are stored in the `cafeDB/` folder
 
 **GUI not displaying properly**
+
 - Ensure you're using Java 21 or later
 - Try running with different look-and-feel settings
-
-### Performance Tips
-
-- **First Launch:** May take a few seconds to initialize the database
-- **Subsequent Launches:** Faster as database is already created
-- **Memory Usage:** Approximately 100-200MB RAM
-- **Disk Space:** ~50MB including database and images
-
----
-
-## 📱 System Requirements
-
-### Minimum Requirements
-- **OS:** Windows 10+, macOS 10.14+, Linux (Ubuntu 18.04+)
-- **Java:** JDK/JRE 21 or later
-- **RAM:** 512MB available memory
-- **Disk:** 100MB free space
-- **Display:** 1024x768 resolution minimum
-
-### Recommended Requirements
-- **RAM:** 1GB+ available memory
-- **Display:** 1920x1080 resolution
-- **Disk:** 200MB+ free space for user data and receipts
 
 ---
 
@@ -152,30 +141,30 @@ To share the application with others:
 
 1. **Copy the entire project folder** (includes database and resources)
 2. **Or share just the JAR file** (target/CafeInventorySystem-1.0-SNAPSHOT-executable.jar)
-   - Recipients will need to create their own database
-   - Application will auto-initialize on first run
+	   - Recipients will need to create their own database
+	   - Application will auto-initialize on first run
 
 ### Platform Compatibility
 
 The JAR file is platform-independent and will run on:
+
 - ✅ Windows (7, 8, 10, 11)
 - ✅ macOS (Intel and Apple Silicon)
 - ✅ Linux (most distributions)
 - ✅ Any system with Java 21+
 
 ---
-
 ## 📞 Support
 
 For issues or questions:
-- **Lorenz Soriano:** 18011129@massey.ac.nz
-- **Phoebe Cruz:** 21143576@massey.ac.nz
+- **Lorenz Soriano:** xvq7775@autuni.ac.nz
+- **Phoebe Cruz:** tfs0091@autuni.ac.nz
 - **GitHub:** https://github.com/Jlowkee19/comp603-pdc-project2
 
 ---
 
 ## 📝 License
 
-This project is developed for academic purposes as part of COMP603 coursework at Massey University.
+This project is developed for academic purposes as part of COMP603 coursework at Auckland University of Technology
 
 **Note:** This is a complete, standalone application that doesn't require any IDE or development environment to run. Simply ensure Java 21+ is installed and use the provided launcher scripts for the best experience.
