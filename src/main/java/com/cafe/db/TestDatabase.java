@@ -9,9 +9,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Test class for verifying Derby database connection and displaying data
- * @author Enzo
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public class TestDatabase {
     
     public static void main(String[] args) {

@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  *
- * @author renzzu19
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
 
 public class MenuItemDAOImpl implements MenuItemDAO {

@@ -8,9 +8,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Receipt model for storing order and payment information
- * @author justlowkee
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public class Receipt {
     private String receiptNumber;
     private Long orderId;

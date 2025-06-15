@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author justlowkee
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
 public interface PaymentDAO {
     Payment createPayment(Payment payment) throws SQLException;

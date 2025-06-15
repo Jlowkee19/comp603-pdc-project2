@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.sql.*;
 
 /**
- * Database utility class for managing Derby database connections
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
 public class Database {
     

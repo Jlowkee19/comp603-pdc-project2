@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  *
- * @author justlowkee
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
 public class PaymentDAOImpl implements PaymentDAO {
 

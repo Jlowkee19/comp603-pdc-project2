@@ -8,8 +8,9 @@ import java.time.LocalDateTime;
 
 /**
  *
- * @author justlowkee
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public class Payment {
     private Long id;
     private Long orderId;

@@ -14,8 +14,8 @@ import java.sql.SQLException;
  */
 
 /**
- * Main application class for the Cafe Management System
- * @author justlowkee
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
 public class CafeApp {    
     

@@ -22,9 +22,10 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 /**
- * Service for handling receipt generation, saving, and printing
- * @author justlowkee
+ *
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public class ReceiptService {
     
     private static final String RECEIPTS_DIR = "receipts";

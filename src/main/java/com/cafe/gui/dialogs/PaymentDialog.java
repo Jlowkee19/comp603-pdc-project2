@@ -17,8 +17,9 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author justlowkee
+ * @author 18011129 Lorenz Soriano & 21143576 Phoebe Cruz
  */
+
 public class PaymentDialog extends javax.swing.JFrame {
     
     public interface PaymentCallback {
