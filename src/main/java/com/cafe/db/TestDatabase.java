@@ -1,8 +1,10 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.cafe.db;
 
-import com.cafe.dao.RoleDAOImpl;
 import com.cafe.dao.UserAccountDAOImpl;
-import com.cafe.model.Role;
 import com.cafe.model.UserAccount;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,35 +16,35 @@ import java.util.List;
  */
 
 public class TestDatabase {
-    
-    public static void main(String[] args) {
-        System.out.println("=== CAFE DATABASE TEST ===");
+    public static void main(String args[]){
+        System.out.println("TESTING DERBY DATABASE CONNECTION");
+        System.out.println("_________________________________");
         
         try {
-            Connection conn = Database.getConnection();
-            System.out.println("✓ Database connection successful!");
+           // Test connection 
+           Connection conn = Database.getConnection();
+           System.out.println("Database connection succestful!");
             
-            // Display all users
-            displayUsers();
+           // Display all users
+           displayUsers();
             
-            // Display all roles
-            displayRoles();
-            
-            Database.shutdownDatabase();
+           // Shutdown test
+           Database.shutdownDatabase();
         
-        } catch (SQLException e) {
-            System.err.println("Database error: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
-            e.printStackTrace();
-        }
-        
-        System.out.println("\n TEST COMPLETE !!!");
+       } catch (SQLException e) {
+           System.err.println("Database error: " + e.getMessage());
+           System.err.println("SQL State: " + e.getMessage());
+           e.printStackTrace();
+       } catch (Exception e){
+           System.err.println("Unexpected error " + e.getMessage());
+           e.printStackTrace();
+       }
+        System.out.println("_________________________________");
+        System.out.println("TEST COMPLETE");
     }
     
     private static void displayUsers() throws SQLException {
-        System.out.println("\n=== USER ACCOUNTS ===");
+        System.out.println("\n === USER ACCOUNTS ===");
         UserAccountDAOImpl userDAO = new UserAccountDAOImpl();
         List<UserAccount> users = userDAO.getAllUsers();
         
@@ -54,21 +56,6 @@ public class TestDatabase {
             }
         }
     }
-    
-    private static void displayRoles() throws SQLException {
-        System.out.println("\n=== ROLES ===");
-        RoleDAOImpl roleDAO = new RoleDAOImpl();
-        List<Role> roles = roleDAO.getAllRoles();
-        
-        if (roles.isEmpty()) {
-            System.out.println("No roles found in database.");
-        } else {
-            for (Role role : roles) {
-                System.out.println(role);
-            }
-        }
-    }
-    
     
     
 }

@@ -13,16 +13,16 @@ import java.util.List;
 
 public class RoleDAOImpl implements RoleDAO {
 
-    private final Connection conn;
-
     public RoleDAOImpl() throws SQLException {
-        this.conn = Database.getConnection();
+        // No longer need to store connection as instance variable
+        // Each method will get a fresh connection
     }
 
     @Override
     public void addRole(Role role) {
         String sql = "INSERT INTO role (name) VALUES (?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, role.getName());
             stmt.executeUpdate();
             
@@ -38,7 +38,8 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public Role getRoleById(Long id) {
         String sql = "SELECT * FROM role WHERE id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -57,7 +58,8 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public Role getRoleByName(String name) {
         String sql = "SELECT * FROM role WHERE name = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
 
@@ -78,7 +80,8 @@ public class RoleDAOImpl implements RoleDAO {
         List<Role> roles = new ArrayList<>();
         String sql = "SELECT * FROM role";
 
-        try (Statement stmt = conn.createStatement();
+        try (Connection connection = Database.getConnection();
+             Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
@@ -98,7 +101,8 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public void updateRole(Role role) {
         String sql = "UPDATE role SET name=? WHERE id=?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, role.getName());
             stmt.setLong(2, role.getId());
             stmt.executeUpdate();
@@ -110,7 +114,8 @@ public class RoleDAOImpl implements RoleDAO {
     @Override
     public void deleteRole(Long id) {
         String sql = "DELETE FROM role WHERE id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
             int affected = stmt.executeUpdate();
             if (affected > 0) {
@@ -122,5 +127,4 @@ public class RoleDAOImpl implements RoleDAO {
             System.err.println("Error deleting role: " + e.getMessage());
         }
     }
-    
 }

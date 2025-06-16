@@ -20,4 +20,5 @@ public interface UserAccountDAO {
     void updateUser(UserAccount user) throws SQLException;
     void deleteUser(int id);
     public void printAllUsers();
+    public void resetIdentitySequence();
 }

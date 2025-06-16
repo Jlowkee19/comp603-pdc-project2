@@ -1,5 +1,6 @@
 package com.cafe.dao;
 
+
 import com.cafe.db.Database;
 import com.cafe.model.UserAccount;
 import java.sql.*;
@@ -20,6 +21,8 @@ public class UserAccountDAOImpl implements UserAccountDAO {
 
     @Override
     public void addUser(UserAccount user) {
+        
+         // Check if username already exists
         if (getUserByUsername(user.getUsername()) != null) {
             throw new RuntimeException("Username '" + user.getUsername() + "' already exists!");
         }
@@ -60,6 +63,7 @@ public class UserAccountDAOImpl implements UserAccountDAO {
                 user.setPassword(rs.getString("password"));
                 user.setPhoto(rs.getBytes("photo"));
 
+                // assuming Role is a simple object
                 user.setRole(new com.cafe.model.Role(null, rs.getString("role")));
 
                 return user;
@@ -101,15 +105,16 @@ public class UserAccountDAOImpl implements UserAccountDAO {
 
     @Override
     public void updateUser(UserAccount user) throws SQLException {
-        String sql = "UPDATE user_account SET firstname=?, lastname=?, password=?, role=?, photo=? WHERE id=?";
+        String sql = "UPDATE user_account SET firstname=?, lastname=?, username=?, password=?, role=?, photo=? WHERE id=?";
         try (Connection connection = Database.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, user.getFirstname());
             stmt.setString(2, user.getLastname());
-            stmt.setString(3, user.getPassword());
-            stmt.setString(4, user.getRole() != null ? user.getRole().getName() : null);
-            stmt.setBytes(5, user.getPhoto());
-            stmt.setLong(6, user.getId());
+            stmt.setString(3, user.getUsername());
+            stmt.setString(4, user.getPassword());
+            stmt.setString(5, user.getRole() != null ? user.getRole().getName() : null);
+            stmt.setBytes(6, user.getPhoto());
+            stmt.setLong(7, user.getId());
 
             int affected = stmt.executeUpdate();
             if (affected == 0) {
@@ -161,6 +166,30 @@ public class UserAccountDAOImpl implements UserAccountDAO {
         }
     }
     
+    public void resetIdentitySequence() {
+        try (Connection connection = Database.getConnection()) {
+            // Get the maximum current ID
+            String maxIdSql = "SELECT COALESCE(MAX(id), 0) FROM user_account";
+            long maxId = 0;
+            
+            try (PreparedStatement stmt = connection.prepareStatement(maxIdSql);
+                 ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    maxId = rs.getLong(1);
+                }
+            }
+            
+            // Reset the identity sequence to start from maxId + 1
+            String alterSql = "ALTER TABLE user_account ALTER COLUMN id RESTART WITH " + (maxId + 1);
+            try (Statement stmt = connection.createStatement()) {
+                stmt.executeUpdate(alterSql);
+                System.out.println("Identity sequence reset to start from: " + (maxId + 1));
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error resetting identity sequence: " + e.getMessage());
+        }
+    }
     
     public long getNextIdentityValue() {
         try (Connection connection = Database.getConnection()) {
